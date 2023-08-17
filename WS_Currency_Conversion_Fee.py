@@ -8,22 +8,24 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 WSCF = 0.01935 #WealthSimple total conversion fee (includes both their 1.5% fee plus the difference between their corperate rate and the actual exchange rate), true for both buy and sell
-QTCF = 0.0175 #Questrades total conversion fee, true for both buy and sell 
-QTFF = 4.95 #Questrade fixed fee
-
-return_no_fee = np.arange(0, 20, 0.2) / 100 #range from 0 to 1 in intervals of 0.002
-WS_return_with_fee = ((return_no_fee + 1)*((1-WSCF)/(1+WSCF)))-1
-WS_return_loss = return_no_fee - WS_return_with_fee
+QTCF = 0.014 #Questrades total conversion fee, true for both buy and sell (0.014)
+QTFF = 4.95 #Questrade fixed fee (assumed to be in CAD and no taxes applied)
+IIA_points = [100, 200, 500, 1000, 3000, 10000] # initial investment amount in CAD (BP_CAD)
 
 plt.figure(figsize=(10, 6))
+
+return_no_fee = np.arange(0, 20, 0.2) / 100 #range from 0 to 1 in intervals of 0.002
+
+WS_return_with_fee = ((return_no_fee + 1)*(1/(1+(2*WSCF))))-1
+WS_return_loss = return_no_fee - WS_return_with_fee
+   
 plt.plot(return_no_fee * 100, WS_return_loss * 100, label="WS") # WealthSimple plot
 
-QT_return_loss = []
-for i in range(2,5):
-    IIA = 10**i # initial investment amount in CAD
+for IIA in IIA_points:
     SP_CAD = (return_no_fee + 1)*IIA # sell price in CAD
-    QT_return_with_fee = ((SP_CAD - (SP_CAD*QTCF) - QTFF) / (IIA + (IIA*QTCF) + QTFF)) - 1
+    QT_return_with_fee = (((SP_CAD/(1+QTCF)) - QTFF) / ((IIA*(2 - (1/(1+QTCF)))) + QTFF)) - 1
     QT_return_loss = return_no_fee - QT_return_with_fee
+
     plt.plot(return_no_fee * 100, QT_return_loss * 100, label="$ {}".format(IIA)) # Questrade plot with $X initial investment
 
 plt.xlabel('% Return (no fee)')
