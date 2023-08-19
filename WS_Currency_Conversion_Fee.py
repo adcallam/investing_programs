@@ -7,7 +7,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-WSCF = 0.01935 #WealthSimple total conversion fee (includes both their 1.5% fee plus the difference between their corperate rate and the actual exchange rate), true for both buy and sell
+WSCF = 0.01935 # 0.01935 WealthSimple total conversion fee (includes both their 1.5% fee plus the difference between their corperate rate and the actual exchange rate), true for both buy and sell
 QTCF = 0.014 #Questrades total conversion fee, true for both buy and sell (0.014)
 QTFF = 6.7 #Questrade fixed fee (assumed to be in CAD and no taxes applied)(the $4.95 fee advertised is actually USD)
 IIA_points = [100, 200, 500, 1000, 3000, 10000] # initial investment amount in CAD (BP_CAD)
